@@ -1,0 +1,43 @@
+// order statics tree is the data structure that supports following operations :
+//	1. Insert value into array in LogN time
+//	2. Delete value from array in LogN time
+//	3. Find rank of value from array in LogN time
+//	4. Find the kth smallest value from array in LogN time 
+
+// Similar to ordered pair (pbds) but pbds does not supports deletion in multiset. 
+
+const ll N = 1e6 + 5;
+ll BIT[N];
+void update(ll ind ,ll val){
+    while(ind < N){
+        BIT[ind] += val;
+        ind += (ind & -ind);
+    }
+}
+ll query(ll ind){
+    ll sum = 0;
+    while(ind > 0){
+        sum += BIT[ind];
+        ind -= (ind & -ind);
+    }
+    return sum;
+}
+void insert_val(ll val){
+    update(val, 1);
+}
+void delete_val(ll val){
+    update(val, -1);
+}
+ll find_rank_of_element(ll ind){
+    return query(ind);
+}
+ll k_smallest_value(ll k){
+    ll l = 0, h = N - 1;
+    while(l <= h){
+        ll m = (l + h) / 2;
+        ll r = query(m);
+        if(r < k) l = m + 1;
+        else h = m - 1;
+    }   
+    return l;
+}
